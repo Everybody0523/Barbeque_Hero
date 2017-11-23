@@ -7,7 +7,10 @@ module rate_divider(LEDR, CLOCK_50, SW);
 	wire [27:0] q;
 
 	rateDivider r0 (SW[1], SW[0], CLOCK_50, rate, q);
-	blinker bl0 (SW[0], q, LEDR[0]);
+    wire enableBlinker;
+    assign enableBlinker = (q == 0) ? 1 : 0;
+	//blinker bl0 (SW[0], q, LEDR[0]);
+    assign LEDR[0] = enableBlinker;
 
 endmodule
 
