@@ -1,8 +1,9 @@
-module steak_control(clock, resetn, go, steakState, flip);
+module steak_control(clock, resetn, go, steakMuscle, steakFat, flip);
     input clock;
     input resetn;
     input go;
-    output reg [2:0] steakState;
+    output reg [8:0] steakMuscle; //One of the colours
+    output reg [8:0] steakFat; //The other colour
     //8 states for a steak: Non-Existent, Raw, Rare, Medium-Rare, Medium,
     //Medium-Well, Well Done, Burnt. We need ceil(log_2(8)) = 3 states.
 
@@ -32,18 +33,94 @@ module steak_control(clock, resetn, go, steakState, flip);
             S_STEAK_NONEXISTENT: next_state = flip ? S_STEAK_NONEXISTENT_WAIT : S_STEAK_NONEXISTENT;
             S_STEAK_NONEXISTENT_WAIT: next_state = flip ? S_STEAK_NONEXISTENT_WAIT : S_STEAK_RAW;
             S_STEAK_RAW: next_state = flip ? S_STEAK_RAW_WAIT : S_STEAK_RAW;
-            S_STEAK_RAW_WAIT: next_state = flip ? S_STEAK_RARE : S_STEAK_RAW_WAIT;
+            S_STEAK_RAW_WAIT: next_state = flip ? S_STEAK_NONEXISTENT : S_STEAK_RAW_WAIT;
             S_STEAK_RARE: next_state = flip ? S_STEAK_RARE_WAIT : S_STEAK_RARE;
-            S_STAKE_RARE_WAIT: next_state = flip ? S_STAEAK_MEDIUMRARE : S_STEAK_RARE_WAIT;
+            S_STAKE_RARE_WAIT: next_state = flip ? S_STEAK_NONEXISTENT : S_STEAK_RARE_WAIT;
             S_STEAK_MEDIUMRARE: next_state = flip ? S_STEAK_MEDIUMRARE_WAIT : S_STEAK_MEDIUMRARE;
-            S_STEAK_MEDIUMRARE_WAIT: next_state = flip ? S_STEAK_MEDIUM : S_STEAK_MEDIUMRARE_WAIT;
+            S_STEAK_MEDIUMRARE_WAIT: next_state = flip ? S_STEAK_NONEXISTENT : S_STEAK_MEDIUMRARE_WAIT;
             S_STEAK_MEDIUM: next_state = flip ? S_STEAK_MEDIUM_WAIT : S_STEAK_MEDIUM;
-            S_STEAK_MEDIUM_WAIT: next_state = flip ? S_STEAK_MEDIUMWELL : S_STEAK_MEDIUM_WAIT;
+            S_STEAK_MEDIUM_WAIT: next_state = flip ? S_STEAK_NONEXISTENT : S_STEAK_MEDIUM_WAIT;
             S_STEAK_MEDIUMWELL: next_state = flip ? S_STEAK_MEDIUMWELL_WAIT : S_STEAK_MEDIUMWELL;
-            S_STEAK_MEDIUMWELL_WAIT: next_state = flip ? S_STEAK_WELLDONE : S_STEAK_MEDIUMWELL_WAIT;
+            S_STEAK_MEDIUMWELL_WAIT: next_state = flip ? S_STEAK_NONEXISTENT : S_STEAK_MEDIUMWELL_WAIT;
             S_STEAK_WELLDONE: next_state = flip ? S_STEAK_WELLDONE_WAIT : S_STEAK_WELLDONE;
-            S_STEAK_WELLDONE_WAIT: next_state = flip ? S_STEAK_BURNT : S_STEAK_WELLDONE_WAIT;
+            S_STEAK_WELLDONE_WAIT: next_state = flip ? S_STEAK_NONEXISTENT : S_STEAK_WELLDONE_WAIT;
             S_STEAK_BURNT: next_state = S_STEAK_NONEXISTENT;
+    end
+    
+    
+    //Output logic aka all datapath control signals
+    always@(*)
+    begin: enable_signals
+    	//by default all control signals are zero
+	steakFat = 9'b000000000;
+	steakMuscle = 9'b000000000;
+	
+	case(current_state)
+	    S_STATE_RAW: begin
+	        steakFat = `FAT_COLOUR_RAW;
+		steakMuscle = `MUSCLE_COLOUR_RAW;
+	    end
+	    
+	    S_STATE_RAW_WAIT: begin
+	    	steakFat = `FAT_COLOUR_RAW;
+		steakMuscle = `MUSCLE_COLOUR_RAW;
+	    end
+
+	    S_STATE_RARE: begin
+	    	steakFat = `FAT_COLOUR_RARE;
+		steakMuscle = `MUSCLE_COLOUR_RARE;
+	    end
+
+	    S_STATE_RARE_WAIT: begin
+	    	steakFat = `FAT_COLOUR_RARE;
+		steakMuscle = `MUSCLE_COLOUR_RARE;
+	    end
+
+	    S_STATE_MEDIUMRARE: begin
+	    	steakFat = `FAT_COLOUR_RAW;
+		steakMuscle = `MUSCLE_COLOUR_RAW;
+	    end
+
+	    S_STATE_MEDIUMRARE_WAIT: begin
+	    	steakFat = `FAT_COLOUR_MEDIUM_RARE;
+		steakMuscle = `MUSCLE_COLOUR_MEDIUM_RARE;
+	    end
+
+	    S_STATE_MEDIUM_WAIT: begin
+	    	steakFat = `FAT_COLOUR_MEDIUM;
+		steakMuscle = `MUSCLE_COLOUR_MEDIUM;
+	    end
+
+	    S_STATE_MEDIUM_WAIT: begin
+	    	steakFat = `FAT_COLOUR_MEDIUM;
+		steakMuscle = `MUSCLE_COLOUR_MEDIUM;
+	    end
+
+	    S_STATE_MEDIUMWELL: begin
+	    	steakFat = `FAT_COLOUR_MEDIUM_RARE;
+		steakMuscle = `MUSCLE_COLOUR_MEDIUM_RARE;
+	    end
+
+	    S_STATE_MEDIUMWELL_WAIT: begin
+	    	steakFat = `FAT_COLOUR_MEDIUM_WELL;
+		steakMuscle = `MUSCLE_COLOUR_MEDIUM_WELL;
+	    end
+	    
+	    S_STATE_WELLDONE: begin
+	    	steakFat = `FAT_COLOUR_WELL_DONE;
+		steakMuscle = `MUSCLE_COLOUR_WELL_DONE;
+	    end
+
+	    S_STATE_WELLDONE_WAIT: begin
+	    	steakFat = `FAT_COLOUR_WELL_DONE;
+		steakMuscle = `MUSCLE_COLOUR_WELL_DONE;
+	    end
+	    
+	    S_STATE_BURNT: begin
+	    	steakFat = `FAT_COLOUR_BURNT;
+		steakMuscle = `MUSCLE_COLOUR_BURNT;
+	    end	    
+	
     end
     
 
