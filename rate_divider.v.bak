@@ -65,7 +65,8 @@ module dipshit(enable, reset_n, clock, rate, q);
     input reset_n;
     input clock;
     input [27:0] rate;
-    output reg [27:0] q;
+    output q;
+    reg [27:0] q;
     always @(posedge clock)
     begin
         if (reset_n == 1'b0)

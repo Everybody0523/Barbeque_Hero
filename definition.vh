@@ -1,24 +1,43 @@
-`define FAT_COLOUR_RAW
-`define MUSCLE_COLOUR_RAW
 
-`define FAT_COLOUR_RAW_MEDIUM
-`define MUSCLE_COLOUR_RAW_MEDIUM
+`define FAT_COLOUR_NONEXISTENT
+`define MUSCLE_COLOUR_NONEXISTENT
 
-`define FAT_COLOUR_MEDIUM_RARE
-`define MUSCLE_COLOUR_MEDIUM_RARE
+`define FAT_COLOUR_RAW 9'b000000000
+`define MUSCLE_COLOUR_RAW 9'b000000000
 
-`define FAT_COLOUR_MIDIUM_WELL
-`define MUSCLE_COLOUR_MEDIUM_WELL
+`define FAT_COLOUR_RARE 9'b011000010
+`define MUSCLE_COLOUR_RARE 9'b011001011
 
-`define FAT_COLOUR_MEDIUM
-`define MUSCLE_COLOUR_MEDIUM
+`define FAT_COLOUR_MEDIUM_RARE 9'b011111111
+`define MUSCLE_COLOUR_MEDIUM_RARE 9'b100000000
 
-`define FAT_COLOUR_WELL_DONE
-`define MUSCLE_COLOUR_WELL_DONE
+`define FAT_COLOUR_MEDIUM_WELL 9'b011000111
+`define MUSCLE_COLOUR_MEDIUM_WELL 9'b011111000
 
-`define FAT_COLOUR_BURNT
-`define MUSCLE_COLOUR_BURNT
+`define FAT_COLOUR_MEDIUM 9'b011110000
+`define MUSCLE_COLOUR_MEDIUM 9'b000111000
 
+`define FAT_COLOUR_WELL_DONE 9'b011000111
+`define MUSCLE_COLOUR_WELL_DONE 9'b011110000
+
+`define FAT_COLOUR_BURNT 9'b011111111
+`define MUSCLE_COLOUR_BURNT 9'b000111111
+
+
+
+`define x_adder0 30
+`define x_adder1 70
+`define x_adder2 110
+`define x_adder3 30
+`define x_adder4 70
+`define x_adder5 110
+
+`define y_adder0 30
+`define y_adder1 30
+`define y_adder2 30
+`define y_adder3 70
+`define y_adder4 70
+`define y_adder5 70
 
 ///////////////////coordinates of fat graphics
 `define x1 3

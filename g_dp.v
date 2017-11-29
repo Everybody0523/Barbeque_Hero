@@ -1,80 +1,10 @@
-// /**
-//   * Six pieces of meat at six fix positions on the screen
-//   * Scoreboard? Too difficult to use text to represent scores
-//   * - use stacks of good stake and bad stake at the top of the screen as the score system
-//   *
-//   *
-// **/
-//
-`include "definition.vh"
-//
-// module graphics(
-//   input clk,
-//   input resetn,
-//   input writeEn,
-//   input colour_muscle,
-//   input colour_fat,
-//
-//   output			VGA_CLK,   				//	VGA Clock
-//   output			VGA_HS,				//	VGA H_SYNC
-//   output			VGA_VS,					//	VGA V_SYNC
-//   output			VGA_BLANK_N,				//	VGA BLANK
-//   output			VGA_SYNC_N,				//	VGA SYNC
-//   output	[9:0]	VGA_R,   				//	VGA Red[9:0]
-//   output	[9:0]	VGA_G,	 				//	VGA Green[9:0]
-//   output	[9:0]	VGA_B   				//	VGA Blue[9:0]
-//   );
-//
-//
-//   wire [8:0] colour;
-//   wire [7:0] x;
-//   wire [7:0] y;
-//
-//
-//   vga_adapter VGA(
-//       .resetn(resetn),
-//       .clock(CLOCK_50),
-//       .colour(colour),
-//       .x(x_draw),
-//       .y(y_draw),
-//       .plot(writeEn),
-//       /* Signals for the DAC to drive the monitor. */
-//       .VGA_R(VGA_R),
-//       .VGA_G(VGA_G),
-//       .VGA_B(VGA_B),
-//       .VGA_HS(VGA_HS),
-//       .VGA_VS(VGA_VS),
-//       .VGA_BLANK(VGA_BLANK_N),
-//       .VGA_SYNC(VGA_SYNC_N),
-//       .VGA_CLK(VGA_CLK));
-//     defparam VGA.RESOLUTION = "160x120";
-//     defparam VGA.MONOCHROME = "FALSE";
-//     defparam VGA.BITS_PER_COLOUR_CHANNEL = 3;
-//     defparam VGA.BACKGROUND_IMAGE = "black.mif";
-//
-//
-//   endmodule
-
-
-    // // count every three seconds
-    // always @(posedge clk or negedge resetn)
-    // begin
-    //   if (!resetn)
-    //     coorCounter <= 21'd0;
-    //   else if (coorCounter_clear)
-    //     coorCounter <= 21'd0;
-    //   else
-    //   begin
-    //     coorCounter <= coorCounter + 1'b1;
-    //   end
-    // end
-    // assign coorCounter_clear = (coorCounter == (21'd1500000-1));
-
 module g_dp(
     input clk,
     input resetn,
     input [8:0] colour_fat,
     input [8:0] colour_muscle,
+    input [7:0] x_adder,
+    input [7:0] y_adder,
 
     output reg [7:0] x_draw,
     output reg [7:0] y_draw,
@@ -143,10 +73,10 @@ module g_dp(
     always @(*)
     begin
 
-      x = 8'd0;
-      y = 8'd0;
-      q = 8'd0;
-      z = 8'd0;
+      x = `x1;
+      y = `y1;
+      q = `q1;
+      z = `z1;
 
       case(coorCounter)
         5'd0: begin
@@ -272,12 +202,12 @@ module g_dp(
 
     always @ ( * ) begin
       if (use_xy) begin
-        x_draw = x;
-        y_draw = y;
+        x_draw = x + x_adder;
+        y_draw = y + y_adder;
         end
       else if (use_qz) begin
-        x_draw = q;
-        y_draw = z;
+        x_draw = q + x_adder;
+        y_draw = z + y_adder;
         end
     end
 
