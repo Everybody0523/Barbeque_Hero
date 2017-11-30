@@ -78,11 +78,27 @@ module barbecue_hero(
     wire [7:0] y_draw_4;
     wire [7:0] y_draw_5;
 
+    wire counter_wire_0;
+    wire counter_wire_1;
+    wire counter_wire_2;
+    wire counter_wire_3;
+    wire counter_wire_4;
+    wire counter_wire_5;
+
+
+    steak_counter sc0(clk, resetn, counter_wire_0);
+    steak_counter sc1(clk, resetn, counter_wire_1);
+    steak_counter sc2(clk, resetn, counter_wire_2);
+    steak_counter sc3(clk, resetn, counter_wire_3);
+    steak_counter sc4(clk, resetn, counter_wire_4);
+    steak_counter sc5(clk, resetn, counter_wire_5);
+
+
     // instantiate 6 graphics controllers ===============================
     controller c0(
       .clk(clk),
 
-      .clock(0),
+      .clock(counter_wire_0),
       .resetn(resetn),
       .flip(user_press[0]),
       .colour_fat(colour_fat_0),
@@ -93,7 +109,7 @@ module barbecue_hero(
     controller c1(
       .clk(clk),
 
-      .clock(0),
+      .clock(counter_wire_1),
       .resetn(resetn),
       .flip(user_press[1]),
       .colour_fat(colour_fat_1),
@@ -104,7 +120,7 @@ module barbecue_hero(
     controller c2(
       .clk(clk),
 
-      .clock(0),
+      .clock(counter_wire_2),
       .resetn(resetn),
       .flip(user_press[2]),
       .colour_fat(colour_fat_2),
@@ -115,7 +131,7 @@ module barbecue_hero(
     controller c3(
       .clk(clk),
 
-      .clock(0),
+      .clock(counter_wire_3),
       .resetn(resetn),
       .flip(user_press[3]),
       .colour_fat(colour_fat_3),
@@ -126,7 +142,7 @@ module barbecue_hero(
     controller c4(
       .clk(clk),
 
-      .clock(0),
+      .clock(counter_wire_4),
       .resetn(resetn),
       .flip(user_press[4]),
       .colour_fat(colour_fat_4),
@@ -137,7 +153,7 @@ module barbecue_hero(
     controller c5(
       .clk(clk),
 
-      .clock(0),
+      .clock(counter_wire_5),
       .resetn(resetn),
       .flip(user_press[5]),
       .colour_fat(colour_fat_5),
