@@ -18,7 +18,7 @@ module steak_counter(
       end
     else if (counter_clear) begin
       counter <= 0;
-      go <= 1;
+      go <= ~go;
       end
     else begin
       go <= 0;

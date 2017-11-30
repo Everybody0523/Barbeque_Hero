@@ -33,16 +33,19 @@ module controller(clk, clock, resetn, flip, colour_muscle, colour_fat);
     begin: state_table
         case (current_state)
             S_STEAK_NONEXISTENT: begin
-            next_state = flip ? S_STEAK_NONEXISTENT_WAIT : S_STEAK_NONEXISTENT;
+            if (clock)
+            next_state = S_STEAK_RAW;
+            else
+            next_state = S_STEAK_NONEXISTENT;
             end
             S_STEAK_NONEXISTENT_WAIT: begin
-            next_state = flip ? S_STEAK_NONEXISTENT_WAIT : S_STEAK_RAW;
+            next_state = flip ? S_STEAK_NONEXISTENT_WAIT : S_STEAK_NONEXISTENT;
             end
 
             S_STEAK_RAW: begin
             if (flip == 1'b1)
             next_state = S_STEAK_RAW_WAIT;
-            else if (clock == 1'b1)
+            else if (!clock)
             next_state = S_STEAK_RARE;
             else
             next_state = S_STEAK_RAW;
@@ -56,7 +59,7 @@ module controller(clk, clock, resetn, flip, colour_muscle, colour_fat);
             //next_state = flip ? S_STEAK_RARE_WAIT : S_STEAK_RARE;
             if (flip == 1'b1)
             next_state = S_STEAK_RARE_WAIT;
-            else if (clock == 1'b1)
+            else if (clock)
             next_state = S_STEAK_MEDIUMRARE;
             else
             next_state = S_STEAK_RARE;
@@ -70,7 +73,7 @@ module controller(clk, clock, resetn, flip, colour_muscle, colour_fat);
             //next_state = flip ? S_STEAK_MEDIUMRARE_WAIT : S_STEAK_MEDIUMRARE;
             if (flip == 1'b1)
             next_state = S_STEAK_MEDIUMRARE_WAIT;
-            else if (clock == 1'b1)
+            else if (!clock)
             next_state = S_STEAK_MEDIUM;
             else
             next_state = S_STEAK_MEDIUMRARE;
@@ -83,7 +86,7 @@ module controller(clk, clock, resetn, flip, colour_muscle, colour_fat);
             S_STEAK_MEDIUM: begin
             if (flip == 1'b1)
             next_state = S_STEAK_MEDIUM_WAIT;
-            else if (clock == 1'b1)
+            else if (clock)
             next_state = S_STEAK_MEDIUMWELL;
             else
             next_state = S_STEAK_MEDIUM;
@@ -97,7 +100,7 @@ module controller(clk, clock, resetn, flip, colour_muscle, colour_fat);
             //next_state = flip ? S_STEAK_MEDIUMWELL_WAIT : S_STEAK_MEDIUMWELL;
             if (flip == 1'b1)
             next_state = S_STEAK_MEDIUMWELL_WAIT;
-            else if (clock == 1'b1)
+            else if (!clock)
             next_state = S_STEAK_WELLDONE;
             else
             next_state = S_STEAK_MEDIUMWELL;
@@ -111,7 +114,7 @@ module controller(clk, clock, resetn, flip, colour_muscle, colour_fat);
             //next_state = flip ? S_STEAK_WELLDONE_WAIT : S_STEAK_WELLDONE;
             if (flip == 1'b1)
             next_state = S_STEAK_WELLDONE_WAIT;
-            else if (clock == 1'b1)
+            else if (clock)
             next_state = S_STEAK_BURNT;
             else
             next_state = S_STEAK_WELLDONE;
@@ -124,7 +127,7 @@ module controller(clk, clock, resetn, flip, colour_muscle, colour_fat);
             S_STEAK_BURNT: begin
             if (flip == 1'b1)
             next_state = S_STEAK_BURNT_WAIT;
-            else if (clock == 1'b1)
+            else if (!clock)
             next_state = S_STEAK_NONEXISTENT;
             else
             next_state = S_STEAK_BURNT;
@@ -175,7 +178,7 @@ module controller(clk, clock, resetn, flip, colour_muscle, colour_fat);
       colour_muscle = `MUSCLE_COLOUR_MEDIUM_RARE;
       end
 
-      S_STEAK_MEDIUM_WAIT: begin
+      S_STEAK_MEDIUM: begin
       	colour_fat = `FAT_COLOUR_MEDIUM;
       colour_muscle = `MUSCLE_COLOUR_MEDIUM;
       end
@@ -206,6 +209,11 @@ module controller(clk, clock, resetn, flip, colour_muscle, colour_fat);
       end
 
       S_STEAK_BURNT: begin
+      	colour_fat = `FAT_COLOUR_BURNT;
+      colour_muscle = `MUSCLE_COLOUR_BURNT;
+      end
+
+		S_STEAK_BURNT_WAIT: begin
       	colour_fat = `FAT_COLOUR_BURNT;
       colour_muscle = `MUSCLE_COLOUR_BURNT;
       end
