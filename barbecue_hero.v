@@ -41,21 +41,6 @@ module barbecue_hero(
     wire [8:0] colour_muscle_4;
     wire [8:0] colour_muscle_5;
 
-    // wire [8:0] colour_fat_0 = 1;
-    // wire [8:0] colour_fat_1 = 1;
-    // wire [8:0] colour_fat_2 = 1;
-    // wire [8:0] colour_fat_3 = 1;
-    // wire [8:0] colour_fat_4 = 1;
-    // wire [8:0] colour_fat_5 = 1;
-    //
-    // wire [8:0] colour_muscle_0 = 1;
-    // wire [8:0] colour_muscle_1 = 1;
-    // wire [8:0] colour_muscle_2 = 1;
-    // wire [8:0] colour_muscle_3 = 1;
-    // wire [8:0] colour_muscle_4 = 1;
-    // wire [8:0] colour_muscle_5 = 1;
-
-
     wire [8:0] colour_out0;
     wire [8:0] colour_out1;
     wire [8:0] colour_out2;
@@ -275,6 +260,7 @@ module pixal_counter(
     output go
   );
 
+  // a counter that counts the number of pixals to draw, could be longer
   reg [5:0] p_counter = 6'd0;
   wire [5:0] p_counter_max = 6'd40;
   always @(posedge clk)
