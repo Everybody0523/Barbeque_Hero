@@ -1,31 +1,25 @@
 `include "definition.vh"
-
-// shift color gradually - change rgb input one bit at a time
-
-
+//
  module main(
-    CLOCK_50,
-    KEY,
-    SW,
-    PS2_DAT,
-    PS2_CLK,
-    // The ports below are for the VGA output.  Do not change.
-    VGA_CLK,   						//	VGA Clock
-    VGA_HS,							//	VGA H_SYNC
-    VGA_VS,							//	VGA V_SYNC
-    VGA_BLANK_N,						//	VGA BLANK
-    VGA_SYNC_N,						//	VGA SYNC
-    VGA_R,   						//	VGA Red[9:0]
-    VGA_G,	 						//	VGA Green[9:0]
-    VGA_B   						//	VGA Blue[9:0]
+   CLOCK_50,
+   KEY,
+   SW,
+
+      // The ports below are for the VGA output.  Do not change.
+      VGA_CLK,   						//	VGA Clock
+      VGA_HS,							//	VGA H_SYNC
+      VGA_VS,							//	VGA V_SYNC
+      VGA_BLANK_N,						//	VGA BLANK
+      VGA_SYNC_N,						//	VGA SYNC
+      VGA_R,   						//	VGA Red[9:0]
+      VGA_G,	 						//	VGA Green[9:0]
+      VGA_B   						//	VGA Blue[9:0]
    );
 
 
-	 input CLOCK_50;
+	input CLOCK_50;
    input [3:0] KEY;
    input [9:0] SW;
-   input PS2_DAT;
-   input PS2_CLK;
 
 		// Declare your inputs and outputs here
 	// Do not change the following outputs
@@ -39,16 +33,19 @@
 	output	[9:0]	VGA_B;   				//	VGA Blue[9:0]
 
 
-  wire [8:0] colour;
-  wire [7:0] x_draw;
-  wire [7:0] y_draw;
+   wire [8:0] colour;
+   wire [7:0] x_draw;
+   wire [7:0] y_draw;
 
-  wire resetn;
-  assign resetn = KEY[0];
+	wire resetn;
+	assign resetn = KEY[0];
 
-  wire valid;
-  wire makeBreak;
-  wire [7:0] outCode;
+	// wire writeEn = KEY[1];
+
+	// wire [8:0] colour_fat;
+	// wire [8:0] colour_muscle;
+	// assign colour_fat = 9'b011000000;
+	// assign colour_muscle = 9'b111000000;
 
  keyboard_press_driver kpd(
    .CLOCK_50(CLOCK_50),
@@ -101,7 +98,6 @@
   barbecue_hero bh(
     .clk(CLOCK_50),
     .resetn(resetn),
-    // .user_press(user_press),
     .user_press({1'b1, 1'b1, 1'b1, KEY[3:1]}),
 
     .x_out(x_draw),
