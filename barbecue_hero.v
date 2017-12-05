@@ -41,6 +41,21 @@ module barbecue_hero(
     wire [8:0] colour_muscle_4;
     wire [8:0] colour_muscle_5;
 
+    // wire [8:0] colour_fat_0 = 1;
+    // wire [8:0] colour_fat_1 = 1;
+    // wire [8:0] colour_fat_2 = 1;
+    // wire [8:0] colour_fat_3 = 1;
+    // wire [8:0] colour_fat_4 = 1;
+    // wire [8:0] colour_fat_5 = 1;
+    //
+    // wire [8:0] colour_muscle_0 = 1;
+    // wire [8:0] colour_muscle_1 = 1;
+    // wire [8:0] colour_muscle_2 = 1;
+    // wire [8:0] colour_muscle_3 = 1;
+    // wire [8:0] colour_muscle_4 = 1;
+    // wire [8:0] colour_muscle_5 = 1;
+
+
     wire [8:0] colour_out0;
     wire [8:0] colour_out1;
     wire [8:0] colour_out2;
@@ -85,7 +100,7 @@ module barbecue_hero(
 
       .clock(counter_wire_0),
       .resetn(resetn),
-      .flip(user_press[0]),
+      .flip(~user_press[0]),
       .colour_fat(colour_fat_0),
       .colour_muscle(colour_muscle_0)
       );
@@ -96,7 +111,7 @@ module barbecue_hero(
 
       .clock(counter_wire_1),
       .resetn(resetn),
-      .flip(user_press[1]),
+      .flip(~user_press[1]),
       .colour_fat(colour_fat_1),
       .colour_muscle(colour_muscle_1)
       );
@@ -107,7 +122,7 @@ module barbecue_hero(
 
       .clock(counter_wire_2),
       .resetn(resetn),
-      .flip(user_press[2]),
+      .flip(~user_press[2]),
       .colour_fat(colour_fat_2),
       .colour_muscle(colour_muscle_2)
       );
@@ -118,7 +133,7 @@ module barbecue_hero(
 
       .clock(counter_wire_3),
       .resetn(resetn),
-      .flip(user_press[3]),
+      .flip(~user_press[3]),
       .colour_fat(colour_fat_3),
       .colour_muscle(colour_muscle_3)
       );
@@ -129,7 +144,7 @@ module barbecue_hero(
 
       .clock(counter_wire_4),
       .resetn(resetn),
-      .flip(user_press[4]),
+      .flip(~user_press[4]),
       .colour_fat(colour_fat_4),
       .colour_muscle(colour_muscle_4)
       );
@@ -140,7 +155,7 @@ module barbecue_hero(
 
       .clock(counter_wire_5),
       .resetn(resetn),
-      .flip(user_press[5]),
+      .flip(~user_press[5]),
       .colour_fat(colour_fat_5),
       .colour_muscle(colour_muscle_5)
       );
@@ -260,7 +275,6 @@ module pixal_counter(
     output go
   );
 
-  // a counter that counts the number of pixals to draw, could be longer
   reg [5:0] p_counter = 6'd0;
   wire [5:0] p_counter_max = 6'd40;
   always @(posedge clk)
@@ -275,3 +289,4 @@ module pixal_counter(
   assign p_counter_clear = (p_counter == p_counter_max);
   assign go = p_counter_clear;
 endmodule
+
