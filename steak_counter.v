@@ -9,6 +9,7 @@ module steak_counter(
   initial counter = 0;
   wire [26:0] counter_max = 27'b101111101011110000100000000;
   wire counter_clear;
+  initial go = 0;
 
   always@(posedge clk)
   begin
@@ -21,7 +22,6 @@ module steak_counter(
       go <= ~go;
       end
     else begin
-      go <= 0;
       counter <= counter + 1;
       end
   end

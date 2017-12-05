@@ -50,7 +50,7 @@
   wire makeBreak;
   wire [7:0] outCode;
 
- keyboard_press_driver(
+ keyboard_press_driver kpd(
    .CLOCK_50(CLOCK_50),
    .valid(valid),
    .makeBreak(makeBreak),
@@ -60,48 +60,49 @@
    .reset(resetn)
    );
 
-   reg [5:0] user_press;
-   reg steak[5:0];
-   // keyboard logic
-   // set high if is a MAKE signal
-   always @ ( * ) begin
-   if (valid) begin
-      case(makeBreak)
-        1'b0: begin //break
-        // outCode is 6B in hexdecimal, key 4, steak 1
-        if (outCode == 8'h6B) user_press[0] = 1'b0;
-        // outCode is 73 in hexdecimal
-        if (outCode == 8'h73) user_press[1] = 1'b0;
-        // outCode is 74 in hexdecimal
-        if (outCode == 8'h74) user_press[2] = 1'b0;
-        // outCode is 69 in hexdecimal
-        if (outCode == 8'h69) user_press[3] = 1'b0;
-        // outCode is 72 in hexdecimal
-        if (outCode == 8'h72) user_press[4] = 1'b0;
-        // outCode is 7A in hexdecimal
-        if (outCode == 8'h7A) user_press[5] = 1'b0;
-        end
-        1'b1: begin //make
-        if (outCode == 8'h6B) user_press[0] = 1'b1;
-        // outCode is 73 in hexdecimal
-        if (outCode == 8'h73) user_press[1] = 1'b1;
-        // outCode is 74 in hexdecimal
-        if (outCode == 8'h74) user_press[2] = 1'b1;
-        // outCode is 69 in hexdecimal
-        if (outCode == 8'h69) user_press[3] = 1'b1;
-        // outCode is 72 in hexdecimal
-        if (outCode == 8'h72) user_press[4] = 1'b1;
-        // outCode is 7A in hexdecimal
-        if (outCode == 8'h7A) user_press[5] = 1'b1;
-        end
-      endcase
-   end
-	end
+  //  reg [5:0] user_press;
+  //  reg steak[5:0];
+  //  // keyboard logic
+  //  // set high if is a MAKE signal
+  //  always @ ( * ) begin
+  //  if (valid) begin
+  //     case(makeBreak)
+  //       1'b0: begin //break
+  //       // outCode is 6B in hexdecimal, key 4, steak 1
+  //       if (outCode == 8'h6B) user_press[0] = 1'b0;
+  //       // outCode is 73 in hexdecimal
+  //       if (outCode == 8'h73) user_press[1] = 1'b0;
+  //       // outCode is 74 in hexdecimal
+  //       if (outCode == 8'h74) user_press[2] = 1'b0;
+  //       // outCode is 69 in hexdecimal
+  //       if (outCode == 8'h69) user_press[3] = 1'b0;
+  //       // outCode is 72 in hexdecimal
+  //       if (outCode == 8'h72) user_press[4] = 1'b0;
+  //       // outCode is 7A in hexdecimal
+  //       if (outCode == 8'h7A) user_press[5] = 1'b0;
+  //       end
+  //       1'b1: begin //make
+  //       if (outCode == 8'h6B) user_press[0] = 1'b1;
+  //       // outCode is 73 in hexdecimal
+  //       if (outCode == 8'h73) user_press[1] = 1'b1;
+  //       // outCode is 74 in hexdecimal
+  //       if (outCode == 8'h74) user_press[2] = 1'b1;
+  //       // outCode is 69 in hexdecimal
+  //       if (outCode == 8'h69) user_press[3] = 1'b1;
+  //       // outCode is 72 in hexdecimal
+  //       if (outCode == 8'h72) user_press[4] = 1'b1;
+  //       // outCode is 7A in hexdecimal
+  //       if (outCode == 8'h7A) user_press[5] = 1'b1;
+  //       end
+  //     endcase
+  //  end
+	// end
 
   barbecue_hero bh(
     .clk(CLOCK_50),
     .resetn(resetn),
-    .user_press(user_press),
+    // .user_press(user_press),
+    .user_press({1'b1, 1'b1, 1'b1, KEY[3:1]}),
 
     .x_out(x_draw),
     .y_out(y_draw),
