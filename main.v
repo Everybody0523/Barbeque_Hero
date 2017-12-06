@@ -95,8 +95,7 @@
 
     .x_out(x_draw),
     .y_out(y_draw),
-    .colour_out(colour),
-    .total_score(score)
+    .colour_out(colour)
     );
 
 
@@ -120,22 +119,6 @@
      defparam VGA.MONOCHROME = "FALSE";
      defparam VGA.BITS_PER_COLOUR_CHANNEL = 3;
      defparam VGA.BACKGROUND_IMAGE = "black.mif";
-
-     wire [7:0] result;
-     assign result[7:0] = (score[8] == 1'b1) ? (~score[7:0] + 8'd1) : score[7:0];
-
-     hex_decoder H0(
-         .hex_digit(result[3:0]),
-         .segments(HEX0)
-         );
-
-     hex_decoder H1(
-         .hex_digit(result[7:4]),
-         .segments(HEX1)
-         );
-
-     assign HEX2[0] = (score[8] == 1'b1) ? 1'b0 : 1'b1;
-     assign HEX2[6:1] = 6'd1;
 
 
    endmodule

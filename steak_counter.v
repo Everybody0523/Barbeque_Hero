@@ -2,14 +2,15 @@
 module steak_counter(
   input clk,
   input resetn,
+  input clockEn,
   output reg [0:0] go
   );
 
   reg [26:0] counter;
-  initial counter = 0;
+  initial counter = 27'd0;
   wire [26:0] counter_max = 27'b101111101011110000100000000;
   wire counter_clear;
-  initial go = 0;
+  initial go = 1'd0;
 
   always@(posedge clk)
   begin
@@ -21,8 +22,11 @@ module steak_counter(
       counter <= 0;
       go <= ~go;
       end
-    else begin
+    else if (clockEn) begin
       counter <= counter + 1;
+      end
+    else begin
+      counter <= 0;
       end
   end
   assign counter_clear = (counter == counter_max);

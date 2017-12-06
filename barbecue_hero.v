@@ -41,21 +41,6 @@ module barbecue_hero(
     wire [8:0] colour_muscle_4;
     wire [8:0] colour_muscle_5;
 
-    // wire [8:0] colour_fat_0 = 1;
-    // wire [8:0] colour_fat_1 = 1;
-    // wire [8:0] colour_fat_2 = 1;
-    // wire [8:0] colour_fat_3 = 1;
-    // wire [8:0] colour_fat_4 = 1;
-    // wire [8:0] colour_fat_5 = 1;
-    //
-    // wire [8:0] colour_muscle_0 = 1;
-    // wire [8:0] colour_muscle_1 = 1;
-    // wire [8:0] colour_muscle_2 = 1;
-    // wire [8:0] colour_muscle_3 = 1;
-    // wire [8:0] colour_muscle_4 = 1;
-    // wire [8:0] colour_muscle_5 = 1;
-
-
     wire [8:0] colour_out0;
     wire [8:0] colour_out1;
     wire [8:0] colour_out2;
@@ -78,6 +63,8 @@ module barbecue_hero(
     wire [7:0] y_draw_4;
     wire [7:0] y_draw_5;
 
+    wire clockEn0, clockEn1, clockEn2, clockEn3, clockEn4, clockEn5;
+
     wire counter_wire_0;
     wire counter_wire_1;
     wire counter_wire_2;
@@ -86,12 +73,23 @@ module barbecue_hero(
     wire counter_wire_5;
 
 
-    steak_counter sc0(clk, resetn, counter_wire_0);
-    steak_counter sc1(clk, resetn, counter_wire_1);
-    steak_counter sc2(clk, resetn, counter_wire_2);
-    steak_counter sc3(clk, resetn, counter_wire_3);
-    steak_counter sc4(clk, resetn, counter_wire_4);
-    steak_counter sc5(clk, resetn, counter_wire_5);
+    steak_counter sc0(clk, resetn, clockEn0, counter_wire_0);
+    steak_counter sc1(clk, resetn, clockEn1, counter_wire_1);
+    steak_counter sc2(clk, resetn, clockEn2, counter_wire_2);
+    steak_counter sc3(clk, resetn, clockEn3, counter_wire_3);
+    steak_counter sc4(clk, resetn, clockEn4, counter_wire_4);
+    steak_counter sc5(clk, resetn, clockEn5, counter_wire_5);
+
+    wire [2:0] steak_show_time_0, steak_show_time_1, steak_show_time_2, steak_show_time_3, steak_show_time_4, steak_show_time_5;
+    wire steak_show_resetn_0, steak_show_resetn_1, steak_show_resetn_2, steak_show_resetn_3, steak_show_resetn_4, steak_show_resetn_5;
+    wire steak_show_0, steak_show_1, steak_show_2, steak_show_3, steak_show_4, steak_show_5;
+
+    steak_show_counter ssc0(clk, resetn, steak_show_resetn_0, steak_show_time_0, steak_show_0);
+    steak_show_counter ssc1(clk, resetn, steak_show_resetn_1, steak_show_time_1, steak_show_1);
+    steak_show_counter ssc2(clk, resetn, steak_show_resetn_2, steak_show_time_2, steak_show_2);
+    steak_show_counter ssc3(clk, resetn, steak_show_resetn_3, steak_show_time_3, steak_show_3);
+    steak_show_counter ssc4(clk, resetn, steak_show_resetn_4, steak_show_time_4, steak_show_4);
+    steak_show_counter ssc5(clk, resetn, steak_show_resetn_5, steak_show_time_5, steak_show_5);
 
 
     // instantiate 6 graphics controllers ===============================
@@ -102,7 +100,11 @@ module barbecue_hero(
       .resetn(resetn),
       .flip(~user_press[0]),
       .colour_fat(colour_fat_0),
-      .colour_muscle(colour_muscle_0)
+      .colour_muscle(colour_muscle_0),
+      .steakShowTime(steak_show_time_0),
+      .steak_show_resetn(steak_show_resetn_0),
+      .clockEn(clockEn0),
+      .show(steak_show_0)
       );
 
 
@@ -113,7 +115,11 @@ module barbecue_hero(
       .resetn(resetn),
       .flip(~user_press[1]),
       .colour_fat(colour_fat_1),
-      .colour_muscle(colour_muscle_1)
+      .colour_muscle(colour_muscle_1),
+      .steakShowTime(steak_show_time_1),
+      .steak_show_resetn(steak_show_resetn_1),
+      .clockEn(clockEn1),
+      .show(steak_show_1)
       );
 
 
@@ -124,7 +130,11 @@ module barbecue_hero(
       .resetn(resetn),
       .flip(~user_press[2]),
       .colour_fat(colour_fat_2),
-      .colour_muscle(colour_muscle_2)
+      .colour_muscle(colour_muscle_2),
+      .steakShowTime(steak_show_time_2),
+      .steak_show_resetn(steak_show_resetn_2),
+      .clockEn(clockEn2),
+      .show(steak_show_2)
       );
 
 
@@ -135,7 +145,11 @@ module barbecue_hero(
       .resetn(resetn),
       .flip(~user_press[3]),
       .colour_fat(colour_fat_3),
-      .colour_muscle(colour_muscle_3)
+      .colour_muscle(colour_muscle_3),
+      .steakShowTime(steak_show_time_3),
+      .steak_show_resetn(steak_show_resetn_3),
+      .clockEn(clockEn3),
+      .show(steak_show_3)
       );
 
 
@@ -146,7 +160,11 @@ module barbecue_hero(
       .resetn(resetn),
       .flip(~user_press[4]),
       .colour_fat(colour_fat_4),
-      .colour_muscle(colour_muscle_4)
+      .colour_muscle(colour_muscle_4),
+      .steakShowTime(steak_show_time_4),
+      .steak_show_resetn(steak_show_resetn_4),
+      .clockEn(clockEn4),
+      .show(steak_show_4)
       );
 
 
@@ -157,7 +175,11 @@ module barbecue_hero(
       .resetn(resetn),
       .flip(~user_press[5]),
       .colour_fat(colour_fat_5),
-      .colour_muscle(colour_muscle_5)
+      .colour_muscle(colour_muscle_5),
+      .steakShowTime(steak_show_time_5),
+      .steak_show_resetn(steak_show_resetn_5),
+      .clockEn(clockEn5),
+      .show(steak_show_5)
       );
 
     // instantiate 6 graphics datapath connected to controllers =========
