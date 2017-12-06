@@ -4,6 +4,12 @@
    CLOCK_50,
    KEY,
    SW,
+   HEX0,
+   HEX1,
+   HEX2,
+
+   PS2_DAT, // PS2 data line
+   PS2_CLK, // PS2 clock line
 
       // The ports below are for the VGA output.  Do not change.
       VGA_CLK,   						//	VGA Clock
@@ -17,9 +23,12 @@
    );
 
 
-	input CLOCK_50;
+   input PS2_DAT; // PS2 data line
+   input PS2_CLK; // PS2 clock line
+	 input CLOCK_50;
    input [3:0] KEY;
    input [9:0] SW;
+   output [6:0] HEX0, HEX1, HEX2;
 
 		// Declare your inputs and outputs here
 	// Do not change the following outputs
@@ -36,17 +45,15 @@
    wire [8:0] colour;
    wire [7:0] x_draw;
    wire [7:0] y_draw;
+   wire signed [8:0] score;
 
 	wire resetn;
 	assign resetn = KEY[0];
 
-	// wire writeEn = KEY[1];
-
-	// wire [8:0] colour_fat;
-	// wire [8:0] colour_muscle;
-	// assign colour_fat = 9'b011000000;
-	// assign colour_muscle = 9'b111000000;
-
+  reg [5:0] user_press;
+  wire [7:0] outCode;
+  wire valid, makeBreak;
+  
  keyboard_press_driver kpd(
    .CLOCK_50(CLOCK_50),
    .valid(valid),
@@ -57,43 +64,29 @@
    .reset(resetn)
    );
 
-  //  reg [5:0] user_press;
-  //  reg steak[5:0];
-  //  // keyboard logic
-  //  // set high if is a MAKE signal
-  //  always @ ( * ) begin
-  //  if (valid) begin
-  //     case(makeBreak)
-  //       1'b0: begin //break
-  //       // outCode is 6B in hexdecimal, key 4, steak 1
-  //       if (outCode == 8'h6B) user_press[0] = 1'b0;
-  //       // outCode is 73 in hexdecimal
-  //       if (outCode == 8'h73) user_press[1] = 1'b0;
-  //       // outCode is 74 in hexdecimal
-  //       if (outCode == 8'h74) user_press[2] = 1'b0;
-  //       // outCode is 69 in hexdecimal
-  //       if (outCode == 8'h69) user_press[3] = 1'b0;
-  //       // outCode is 72 in hexdecimal
-  //       if (outCode == 8'h72) user_press[4] = 1'b0;
-  //       // outCode is 7A in hexdecimal
-  //       if (outCode == 8'h7A) user_press[5] = 1'b0;
-  //       end
-  //       1'b1: begin //make
-  //       if (outCode == 8'h6B) user_press[0] = 1'b1;
-  //       // outCode is 73 in hexdecimal
-  //       if (outCode == 8'h73) user_press[1] = 1'b1;
-  //       // outCode is 74 in hexdecimal
-  //       if (outCode == 8'h74) user_press[2] = 1'b1;
-  //       // outCode is 69 in hexdecimal
-  //       if (outCode == 8'h69) user_press[3] = 1'b1;
-  //       // outCode is 72 in hexdecimal
-  //       if (outCode == 8'h72) user_press[4] = 1'b1;
-  //       // outCode is 7A in hexdecimal
-  //       if (outCode == 8'h7A) user_press[5] = 1'b1;
-  //       end
-  //     endcase
-  //  end
-	// end
+   // keyboard logic
+   always @ (posedge valid) begin
+      case(makeBreak)
+        1'b0:  //break
+          case(outCode)
+            8'h15: user_press[0] <= 1'b0;
+            8'h1D: user_press[1] <= 1'b0;
+            8'h24: user_press[2] <= 1'b0;
+            8'h1C: user_press[3] <= 1'b0;
+            8'h1B: user_press[4] <= 1'b0;
+            8'h23: user_press[5] <= 1'b0;
+				endcase
+        1'b1: //make
+          case(outCode)
+            8'h15: user_press[0] <= 1'b1;
+            8'h1D: user_press[1] <= 1'b1;
+            8'h24: user_press[2] <= 1'b1;
+            8'h1C: user_press[3] <= 1'b1;
+            8'h1B: user_press[4] <= 1'b1;
+            8'h23: user_press[5] <= 1'b1;
+				endcase
+		endcase
+	end
 
   barbecue_hero bh(
     .clk(CLOCK_50),
@@ -102,7 +95,8 @@
 
     .x_out(x_draw),
     .y_out(y_draw),
-    .colour_out(colour)
+    .colour_out(colour),
+    .total_score(score)
     );
 
 
@@ -126,6 +120,22 @@
      defparam VGA.MONOCHROME = "FALSE";
      defparam VGA.BITS_PER_COLOUR_CHANNEL = 3;
      defparam VGA.BACKGROUND_IMAGE = "black.mif";
+
+     wire [7:0] result;
+     assign result[7:0] = (score[8] == 1'b1) ? (~score[7:0] + 8'd1) : score[7:0];
+
+     hex_decoder H0(
+         .hex_digit(result[3:0]),
+         .segments(HEX0)
+         );
+
+     hex_decoder H1(
+         .hex_digit(result[7:4]),
+         .segments(HEX1)
+         );
+
+     assign HEX2[0] = (score[8] == 1'b1) ? 1'b0 : 1'b1;
+     assign HEX2[6:1] = 6'd1;
 
 
    endmodule
