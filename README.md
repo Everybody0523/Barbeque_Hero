@@ -1,2 +1,4 @@
-# CSC258_Final_Project
-A CSC258 Final Project
+# Barbeque Hero
+Verilog project.
+
+Requires Altera DE1 board and PS2 Keyboard.
